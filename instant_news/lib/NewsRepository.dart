@@ -9,4 +9,8 @@ class NewsRepository {
     return api.getEverything(query);
   }
 
+  Future<NewsResponse>getTrending(String country) {
+    return api.getTrending(country);
+  }
+
 }
