@@ -12,4 +12,13 @@ class NewsApi {
     Response response = await BaseDio().dio.get("everything", queryParameters: param);
     return NewsResponse.fromJson(response.data);
   }
+
+  Future<NewsResponse> getTrending(String country) async {
+    final Map<String, String> param = {
+      'country': country,
+      'apiKey': BaseDio().apiKey,
+    };
+    Response response = await BaseDio().dio.get("top-headlines", queryParameters: param);
+    return NewsResponse.fromJson(response.data);
+  }
 }
