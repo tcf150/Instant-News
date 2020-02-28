@@ -22,17 +22,17 @@ class NewsBloc {
     });
   }
 
-  getEverything(String query) async {
+  Future<void> getEverything(String query) async {
     NewsResponse response = await repository.getEverything(query);
     _subject.sink.add(response.articles);
   }
 
-  getTrending() async {
+  Future<void> getTrending() async {
     NewsResponse response = await repository.getTrending(countryCode);
     _subject.sink.add(response.articles);
   }
 
-  onSearchTextChanged(String query) {
+  Future<void> onSearchTextChanged(String query) {
     _searchSubject.sink.add(query);
   }
 

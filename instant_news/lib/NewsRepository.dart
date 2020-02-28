@@ -5,11 +5,11 @@ import 'model/NewsResponse.dart';
 class NewsRepository {
   NewsApi api = NewsApi();
 
-  Future<NewsResponse>getEverything(String query) {
+  Future<NewsResponse> getEverything(String query) {
     return api.getEverything(query);
   }
 
-  Future<NewsResponse>getTrending(String country) {
+  Future<NewsResponse> getTrending(String country) {
     return api.getTrending(country);
   }
 

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class BaseDio {
-  String apiKey = "";
+  String apiKey = "6c5c888290f647818122022f271a88f0";
   Dio dio;
 
   BaseDio._privateConstructor() {

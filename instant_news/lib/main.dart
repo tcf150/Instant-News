@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instant_news/NewsBloc.dart';
 import 'package:instant_news/model/Article.dart';
+import 'package:instant_news/search.dart';
 import 'package:instant_news/view/ArticleListView.dart';
 
 void main() => runApp(MyApp());
@@ -10,7 +11,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Instant News',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -43,28 +43,25 @@ class _MyHomePageState extends State<MyHomePage> {
         return Scaffold(
             appBar: AppBar(
               title: Text(widget.title),
-            ),
-            body: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
-                    child: TextField(
-                      onChanged: (text) {
-                        newsBloc.onSearchTextChanged(text);
-                      },
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: 'Search'),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  child: ArticleListView(articles: snapshot.data),
-                  flex: 1,
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+                  },
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  )
                 )
               ],
-            ));
+            ),
+            body: Container(
+              child: Center(
+                child: RefreshIndicator(
+                  child: ArticleListView(articles: snapshot.data),
+                  onRefresh: () => newsBloc.getTrending(),)
+            ))
+        );
       },
     );
   }
