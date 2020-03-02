@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:instant_news/model/SearchRequest.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -7,13 +9,27 @@ class SearchPage extends StatefulWidget {
 }
 
 class SearchState extends State<StatefulWidget> {
-  final keywordField = TextField(
-    decoration: InputDecoration(
-        labelText: "Keyword",
-        hintText: "Input search keywords",
-        filled: true,
-        border: OutlineInputBorder()),
-  );
+
+  @override
+  void initState() {
+    setState(() {
+      _sortBy = "publishedAt";
+      _preference = "Everything";
+    });
+    super.initState();
+  }
+
+  final _keywordController = TextEditingController();
+  TextField buildKeywordTextField() {
+    return TextField(
+      controller: _keywordController,
+      decoration: InputDecoration(
+          labelText: "Keyword",
+          hintText: "Input search keywords",
+          filled: true,
+          border: OutlineInputBorder()),
+    );
+  }
 
   // multi options for source
   final sourcesField = TextField(
@@ -28,77 +44,142 @@ class SearchState extends State<StatefulWidget> {
     },
   );
 
-  final fromField = TextField(
-    decoration: InputDecoration(
-      icon: Icon(Icons.calendar_today),
-      hintText: "news from: ",
-      filled: false,
-    ),
-    onTap: () {
-      //TODO open date time picker
-    },
-  );
+  String _date = "";
+  final fromTimeLabel = Text("Search from time: (Optional)",
+      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
 
-  final toField = TextField(
-    decoration: InputDecoration(
-      icon: Icon(Icons.calendar_today),
-      hintText: "news to: ",
-      filled: false,
-    ),
-    onTap: () {
-      //TODO open date time picker
-    },
-  );
+  Container buildDateTimePicker() {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          RaisedButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            elevation: 4.0,
+            onPressed: () {
+              DatePicker.showDatePicker(
+                  context, theme: DatePickerTheme(containerHeight: 200),
+                  showTitleActions: true,
+                  onConfirm: (date) {
+                    _date = '${date.year}-${date.month}-${date.day}';
+                    setState(() {});
+                  },
+                  currentTime: DateTime.now(),
+                  locale: LocaleType.en);
+            },
+            child: Container(
+              alignment: Alignment.center,
+              height: 50.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.date_range,
+                              size: 18.0,
+                              color: Colors.teal,
+                            ),
+                            Text(
+                              " $_date",
+                              style: TextStyle(
+                                  color: Colors.teal,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Text(
+                    "  Change",
+                    style: TextStyle(
+                        color: Colors.teal,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0),
+                  ),
+                ],
+              ),
+            ),
+            color: Colors.white,
+          )
+        ],
+      ),
+    );
+  }
 
+
+  String _sortBy = "publishedAt";
   final sortByLabel = Text("SortBy: ",
       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
 
-  // Single option for sort
-  final sortByField = Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: <Widget>[
-      Radio(
-        value: 1,
-        groupValue: "groupvalue1",
-        onChanged: (val) {},
-      ),
-      Text("publishedAt"),
-      Radio(
-        value: 2,
-        groupValue: "groupvalue2",
-        onChanged: (val) {},
-      ),
-      Text("relevancy"),
-      Radio(
-        value: 1,
-        groupValue: "groupvalue3",
-        onChanged: (val) {},
-      ),
-      Text("popularity"),
-    ],
-  );
+  Row buildSortByRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Radio(
+          value: "publishedAt",
+          groupValue: _sortBy,
+          onChanged: _sortByRadioButtonChanges,
+        ),
+        Text("publishedAt"),
+        Radio(
+          value: "relevancy",
+          groupValue: _sortBy,
+          onChanged: _sortByRadioButtonChanges,
+        ),
+        Text("relevancy"),
+        Radio(
+          value: "popularity",
+          groupValue: _sortBy,
+          onChanged: _sortByRadioButtonChanges,
+        ),
+        Text("popularity"),
+      ],
+    );
+  }
+
+  void _sortByRadioButtonChanges(String value) {
+    setState(() {
+      _sortBy = value;
+    });
+  }
 
   final preferenceLabel = Text("Preference: ",
       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
 
+  static String _preference = "test";
+
   // Single option for sort
-  final apiField = Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: <Widget>[
-      Radio(
-        value: 1,
-        groupValue: "Top Trending",
-        onChanged: (val) {},
-      ),
-      Text("Top Trending"),
-      Radio(
-        value: 2,
-        groupValue: "Everything",
-        onChanged: (val) {},
-      ),
-      Text("Everything"),
-    ],
-  );
+  Row buildPreferenceRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Radio(
+          value: "Top-Trending",
+          groupValue: _preference,
+          onChanged: (val) {
+            _preference = val;
+          },
+        ),
+        Text("Top-Trending"),
+        Radio(
+          value: "Everything",
+          groupValue: _preference,
+          onChanged: (val) {
+            _preference = val;
+          },
+        ),
+        Text("Everything"),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,37 +198,53 @@ class SearchState extends State<StatefulWidget> {
         ],
       ),
       body: Container(
-          margin: EdgeInsets.all(10.0),
-          child: Column(
-            children: <Widget>[
-              keywordField,
-              SizedBox(
-                height: 10,
+        margin: EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                buildKeywordTextField(),
+                SizedBox(
+                  height: 10,
+                ),
+                fromTimeLabel,
+                SizedBox(
+                  height: 10,
+                ),
+                buildDateTimePicker(),
+                SizedBox(
+                  height: 10,
+                ),
+                sortByLabel,
+                buildSortByRow(),
+                SizedBox(
+                  height: 10,
+                ),
+                preferenceLabel,
+                buildPreferenceRow(),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: RaisedButton(
+                child: Text("Search!",
+                    style: TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
+                onPressed: () {
+                  Navigator.pop(context, SearchRequest(
+                      _keywordController.text, _date, _sortBy, _preference, "en"
+                  ));
+                },
               ),
-              sourcesField,
-              SizedBox(
-                height: 10,
-              ),
-              fromField,
-              SizedBox(
-                height: 10,
-              ),
-              toField,
-              SizedBox(
-                height: 10,
-              ),
-              sortByLabel,
-              sortByField,
-              SizedBox(
-                height: 10,
-              ),
-              preferenceLabel,
-              apiField,
-              SizedBox(
-                height: 10,
-              ),
-            ],
-          )),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
