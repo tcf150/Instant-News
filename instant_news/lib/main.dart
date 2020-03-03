@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instant_news/NewsBloc.dart';
 import 'package:instant_news/model/Article.dart';
+import 'package:instant_news/model/SearchRequest.dart';
 import 'package:instant_news/search.dart';
 import 'package:instant_news/view/ArticleListView.dart';
 
@@ -35,6 +36,12 @@ class _MyHomePageState extends State<MyHomePage> {
     newsBloc.getTrending();
   }
 
+  _navigateToSearch(BuildContext context) async {
+    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+    final SearchRequest request = result as SearchRequest;
+    newsBloc.getEverything(request);
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Article>>(
@@ -46,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
               actions: <Widget>[
                 IconButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+                    _navigateToSearch(context);
                   },
                   icon: Icon(
                     Icons.search,
