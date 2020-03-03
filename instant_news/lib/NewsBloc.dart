@@ -12,7 +12,6 @@ class NewsBloc {
 
   Future<void> getEverything(SearchRequest request) async {
     NewsResponse response = await repository.getEverything(request);
-    _subject.close();
     _subject.sink.add(response.articles);
   }
 
