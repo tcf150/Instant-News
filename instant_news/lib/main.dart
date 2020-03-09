@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instant_news/NewsBloc.dart';
+import 'package:instant_news/health.dart';
 import 'package:instant_news/model/Article.dart';
 import 'package:instant_news/model/SearchRequest.dart';
 import 'package:instant_news/search.dart';
@@ -42,6 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
     newsBloc.getEverything(request);
   }
 
+  _navigateToHealth(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => HealthPage()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Article>>(
@@ -59,6 +64,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     Icons.search,
                     color: Colors.white,
                   )
+                ),
+                IconButton(
+                    onPressed: () {
+                      _navigateToHealth(context);
+                    },
+                    icon: Icon(
+                      Icons.accessible_forward,
+                      color: Colors.white,
+                    )
                 )
               ],
             ),
