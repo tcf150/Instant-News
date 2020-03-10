@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "157773060895",
+    "firebase_url": "https://instant-news-7840b.firebaseio.com",
+    "project_id": "instant-news-7840b",
+    "storage_bucket": "instant-news-7840b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157773060895:android:4f4740add1f7e4e7eaae2a",
+        "android_client_info": {
+          "package_name": "com.instant.instant_news"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "157773060895-9g7efvtmlbpnu5tvs80ejfv9p6uohqdp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZhNACDaNSPX-7OabnssRDF9L9HPvzXhc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "157773060895-9g7efvtmlbpnu5tvs80ejfv9p6uohqdp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

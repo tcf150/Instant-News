@@ -10,7 +10,6 @@ class HealthPage extends StatefulWidget {
 }
 
 class HealthState extends State<StatefulWidget> {
-  final _dataController = TextEditingController();
   List<FitData> _list = List();
   var isLoading = false;
 
@@ -19,10 +18,18 @@ class HealthState extends State<StatefulWidget> {
       isLoading = true;
     });
 
-    final list = await FitKit.read(DataType.STEP_COUNT);
+    final list = await FitKit.read(DataType.STEP_COUNT,
+      dateFrom: DateTime.now().subtract(Duration(days: 5)),
+      dateTo: DateTime.now(), limit: 50);
+
+    if (list.length == 0) {
+      _list.add(FitData(10, null, null, "source", true));
+    } else {
+      _list.addAll(list);
+    }
 
     setState(() {
-      _list = list;
+      _list = _list;
       isLoading = false;
     });
   }
@@ -33,13 +40,13 @@ class HealthState extends State<StatefulWidget> {
             child: CircularProgressIndicator(),
           )
         : ListView.builder(
-            itemCount: _list.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                contentPadding: EdgeInsets.all(10.0),
-                title: new Text(_list[index].toString()),
-              );
-            });
+        itemCount: _list.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            contentPadding: EdgeInsets.all(10.0),
+            title: new Text(_list[index].toString()),
+          );
+        });
   }
 
   @override
@@ -109,14 +116,7 @@ class HealthState extends State<StatefulWidget> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                  itemCount: _list.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.all(10.0),
-                      title: new Text(_list[index].toString()),
-                    );
-                  }),
+              child: _buildDataResultWidget(),
             )
           ],
         ),
