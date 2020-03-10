@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:instant_news/NewsBloc.dart';
+import 'package:instant_news/firebase_notification_handler.dart';
+import 'package:instant_news/health.dart';
 import 'package:instant_news/model/Article.dart';
 import 'package:instant_news/model/SearchRequest.dart';
+import 'package:instant_news/pushnotification/pushexample.dart';
 import 'package:instant_news/search.dart';
 import 'package:instant_news/view/ArticleListView.dart';
 
@@ -30,9 +33,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   void initState() {
     super.initState();
+
+    FirebaseNotifications().setUpFirebase(context);
     newsBloc.getTrending();
   }
 
@@ -40,6 +46,14 @@ class _MyHomePageState extends State<MyHomePage> {
     final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
     final SearchRequest request = result as SearchRequest;
     newsBloc.getEverything(request);
+  }
+
+  _navigateToHealth(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => HealthPage()));
+  }
+
+  _navigateToPushExample(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => PushExample()));
   }
 
   @override
@@ -59,7 +73,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     Icons.search,
                     color: Colors.white,
                   )
-                )
+                ),
+                IconButton(
+                    onPressed: () {
+                      _navigateToHealth(context);
+                    },
+                    icon: Icon(
+                      Icons.accessible_forward,
+                      color: Colors.white,
+                    )
+                ),
+//                IconButton(
+//                    onPressed: () {
+//                      _navigateToPushExample(context);
+//                    },
+//                    icon: Icon(
+//                      Icons.notifications_active,
+//                      color: Colors.white,
+//                    )
+//                )
               ],
             ),
             body: Container(
