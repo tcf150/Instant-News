@@ -1,3 +1,4 @@
+import 'package:fit_kit/fit_kit.dart';
 import 'package:instant_news/NewsRepository.dart';
 import 'package:instant_news/model/Article.dart';
 import 'package:instant_news/model/NewsResponse.dart';
@@ -20,10 +21,13 @@ class NewsBloc {
     _subject.sink.add(response.articles);
   }
 
+  Future<void> postHealthData(List<FitData> data) async {
+    repository.postHealthData(data);
+  }
+
   dispose() {
     _subject.close();
   }
-
 
   BehaviorSubject<List<Article>> get subject => _subject;
 }

@@ -1,3 +1,4 @@
+import 'package:fit_kit/fit_kit.dart';
 import 'package:instant_news/api/NewsApi.dart';
 import 'package:instant_news/model/SearchRequest.dart';
 
@@ -17,6 +18,10 @@ class NewsRepository {
 
   Future<NewsResponse> getTrending(String country) {
     return api.getTrending(country);
+  }
+
+  Future<void> postHealthData(List<FitData> data) {
+    api.postHealthData(data);
   }
 
 }

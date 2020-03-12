@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:fit_kit/fit_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instant_news/NewsBloc.dart';
 
 class HealthPage extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class HealthPage extends StatefulWidget {
 class HealthState extends State<StatefulWidget> {
   List<FitData> _list = List();
   var isLoading = false;
+  var _uploadButtonVisible = false;
 
   _fetchData() async {
     setState(() {
@@ -19,8 +21,9 @@ class HealthState extends State<StatefulWidget> {
     });
 
     final list = await FitKit.read(DataType.STEP_COUNT,
-      dateFrom: DateTime.now().subtract(Duration(days: 5)),
-      dateTo: DateTime.now(), limit: 50);
+        dateFrom: DateTime.now().subtract(Duration(days: 5)),
+        dateTo: DateTime.now(),
+        limit: 50);
 
     if (list.length == 0) {
       _list.add(FitData(10, null, null, "source", true));
@@ -31,6 +34,9 @@ class HealthState extends State<StatefulWidget> {
     setState(() {
       _list = _list;
       isLoading = false;
+      if (_list.length > 1) {
+        _uploadButtonVisible = true;
+      }
     });
   }
 
@@ -40,13 +46,13 @@ class HealthState extends State<StatefulWidget> {
             child: CircularProgressIndicator(),
           )
         : ListView.builder(
-        itemCount: _list.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            contentPadding: EdgeInsets.all(10.0),
-            title: new Text(_list[index].toString()),
-          );
-        });
+            itemCount: _list.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                contentPadding: EdgeInsets.all(10.0),
+                title: new Text(_list[index].toString()),
+              );
+            });
   }
 
   @override
@@ -117,6 +123,17 @@ class HealthState extends State<StatefulWidget> {
             ),
             Expanded(
               child: _buildDataResultWidget(),
+            ),
+            Visibility(
+              visible: _uploadButtonVisible,
+              child: RaisedButton(
+                  child: Text("Upload Data",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    // todo upload the data to server
+                    newsBloc.postHealthData(_list);
+                  }),
             )
           ],
         ),
