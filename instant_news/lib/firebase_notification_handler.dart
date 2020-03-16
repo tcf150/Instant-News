@@ -62,6 +62,7 @@ class FirebaseNotifications {
   }
 
   void iOS_Permission() {
+    _firebaseMessaging.configure();
     _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.onIosSettingsRegistered

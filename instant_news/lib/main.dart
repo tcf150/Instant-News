@@ -34,12 +34,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+
   @override
   void initState() {
     super.initState();
 
     FirebaseNotifications().setUpFirebase(context);
-    newsBloc.getTrending();
   }
 
   _navigateToSearch(BuildContext context) async {
@@ -58,6 +58,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Locale locale = Localizations.localeOf(context);
+    String _countryCode = locale.countryCode;
+
+    setState(() {
+      newsBloc.getTrending(_countryCode);
+    });
+
     return StreamBuilder<List<Article>>(
       stream: newsBloc.subject.stream,
       builder: (context, AsyncSnapshot<List<Article>> snapshot) {
@@ -98,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Center(
                 child: RefreshIndicator(
                   child: ArticleListView(articles: snapshot.data),
-                  onRefresh: () => newsBloc.getTrending(),)
+                  onRefresh: () => newsBloc.getTrending(_countryCode),)
             ))
         );
       },

@@ -9,14 +9,13 @@ import 'dart:ui' as ui;
 class NewsBloc {
   final NewsRepository repository = NewsRepository();
   final BehaviorSubject<List<Article>> _subject = BehaviorSubject<List<Article>>();
-  final String countryCode = ui.window.locale.countryCode;
 
   Future<void> getEverything(SearchRequest request) async {
     NewsResponse response = await repository.getEverything(request);
     _subject.sink.add(response.articles);
   }
 
-  Future<void> getTrending() async {
+  Future<void> getTrending(String countryCode) async {
     NewsResponse response = await repository.getTrending(countryCode);
     _subject.sink.add(response.articles);
   }
