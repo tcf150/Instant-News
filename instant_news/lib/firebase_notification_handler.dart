@@ -22,6 +22,10 @@ class FirebaseNotifications {
     firebaseCloudMessaging_Listeners(context);
   }
 
+  Future<String> getToken() async {
+    return _firebaseMessaging.getToken();
+  }
+
   Future _onSelectNotification(String payload, BuildContext context) async {
     showDialog(
         context: context,
@@ -42,10 +46,6 @@ class FirebaseNotifications {
 
   void firebaseCloudMessaging_Listeners(BuildContext context) {
     if (Platform.isIOS) iOS_Permission();
-
-    _firebaseMessaging.getToken().then((token) {
-      print("token: " + token);
-    });
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {

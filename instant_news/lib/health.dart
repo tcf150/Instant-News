@@ -6,11 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:instant_news/NewsBloc.dart';
 
 class HealthPage extends StatefulWidget {
+  final String token;
+  const HealthPage(this.token);
+
+//  get getToken => token;
+
   @override
   State<StatefulWidget> createState() => HealthState();
 }
 
-class HealthState extends State<StatefulWidget> {
+class HealthState extends State<HealthPage> {
   List<FitData> _list = List();
   var isLoading = false;
   var _uploadButtonVisible = false;
@@ -131,8 +136,7 @@ class HealthState extends State<StatefulWidget> {
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   onPressed: () {
-                    // todo upload the data to server
-                    newsBloc.postHealthData(_list);
+                    newsBloc.postHealthData(_list, widget.token);
                   }),
             )
           ],

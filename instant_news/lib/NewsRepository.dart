@@ -20,8 +20,8 @@ class NewsRepository {
     return api.getTrending(country);
   }
 
-  Future<void> postHealthData(List<FitData> data) {
-    api.postHealthData(data);
+  Future<void> postHealthData(List<FitData> data, String token) {
+    api.postHealthData(data, token);
   }
 
 }

@@ -42,4 +42,7 @@ ios/Pod*
 #android
 android/settings_aar.gradle
 
+Pods/*
+Podfile.lock
+
 pubspec.lock
