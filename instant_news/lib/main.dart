@@ -33,13 +33,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  FirebaseNotifications firebaseManager;
 
   @override
   void initState() {
     super.initState();
 
-    FirebaseNotifications().setUpFirebase(context);
+    firebaseManager = FirebaseNotifications();
+    firebaseManager.setUpFirebase(context);
   }
 
   _navigateToSearch(BuildContext context) async {
@@ -48,8 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
     newsBloc.getEverything(request);
   }
 
-  _navigateToHealth(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => HealthPage()));
+  _navigateToHealth(BuildContext context) async {
+    final token = await firebaseManager.getToken();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => HealthPage(token)));
   }
 
   _navigateToPushExample(BuildContext context) {

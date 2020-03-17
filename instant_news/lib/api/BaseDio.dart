@@ -9,10 +9,10 @@ class BaseDio {
   BaseDio._privateConstructor() {
     dio = Dio();
     dio.options = BaseOptions(
-//      baseUrl: "https://192.168.1.14:8765/", // IP address of go server
-      baseUrl: "https://newsapi.org/v2/",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
+      baseUrl: "http://192.168.1.8:8765/", // IP address of go server
+//      baseUrl: "https://newsapi.org/v2/",
+//      connectTimeout: 5000,
+//      receiveTimeout: 3000,
     );
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
       client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;

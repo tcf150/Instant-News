@@ -1,10 +1,20 @@
 
 import 'package:fit_kit/fit_kit.dart';
+import 'package:instant_news/model/FitData_extension.dart';
 
 class HealthData {
-  List<FitData> dataList;
+  final String token;
+  final List<FitData> fitDataList;
+  HealthData(this.token,
+      this.fitDataList,);
 
-  HealthData(List<FitData> dataList) {
-    dataList = dataList;
+  Map<String, dynamic> toJson() {
+    List<Map<String, dynamic>> fitDataListJson = fitDataList.map((data) => data.toJson()).toList();
+    
+    return {
+      'token': token,
+      'fitDataList': fitDataListJson,
+    };
   }
+
 }

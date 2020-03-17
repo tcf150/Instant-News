@@ -20,8 +20,8 @@ class NewsBloc {
     _subject.sink.add(response.articles);
   }
 
-  Future<void> postHealthData(List<FitData> data) async {
-    repository.postHealthData(data);
+  Future<void> postHealthData(List<FitData> data, String token) async {
+    repository.postHealthData(data, token);
   }
 
   dispose() {

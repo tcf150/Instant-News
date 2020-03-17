@@ -9,7 +9,7 @@ class NewsApi {
 
   Future<NewsResponse> getEverything(Map<String, String> params) async {
     params.putIfAbsent("apiKey", () => apiKey);
-    Response response = await BaseDio().dio.get("everything", queryParameters: params);
+    Response response = await BaseDio().dio.get("/api/news/everything", queryParameters: params);
     return NewsResponse.fromJson(response.data);
   }
 
@@ -19,11 +19,12 @@ class NewsApi {
       'apiKey': apiKey,
     };
 
-    Response response = await BaseDio().dio.get("top-headlines", queryParameters: param);
+    Response response = await BaseDio().dio.get("/api/news/top-headlines", queryParameters: param);
     return NewsResponse.fromJson(response.data);
   }
   
-  Future<void> postHealthData(List<FitData> data) async {
-    BaseDio().dio.post("uploadHealthData", data: HealthData(data));
+  Future<void> postHealthData(List<FitData> dataList, String token) async {
+    var healthData = HealthData(token, dataList);
+    BaseDio().dio.post("/api/ps/healthData", data: healthData);
   }
 }
